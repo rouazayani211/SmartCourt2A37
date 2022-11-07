@@ -35,6 +35,7 @@ void employes::setprenom(QString prenom){this->prenom=prenom;}
 void employes::setdate_naissance(QString date_naissance){this->date_naissance=date_naissance;}
 void employes::setadresse(QString adresse){this->adresse=adresse;}
 void employes::setgrade(QString grade){this->grade=grade;}
+//test ajout tutoriel
 bool employes::ajouter()
 {
     QSqlQuery query;
