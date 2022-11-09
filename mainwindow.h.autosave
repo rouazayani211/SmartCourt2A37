@@ -28,9 +28,6 @@ private slots:
     void on_tri_clicked();
 
 
-
-    void on_tri_prenom_clicked();
-
 private:
     Ui::MainWindow *ui;
     employes emp;

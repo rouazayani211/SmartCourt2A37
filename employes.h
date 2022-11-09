@@ -3,6 +3,10 @@
 #include<QString>
 #include<QSqlQuery>
 #include<QSqlQueryModel>
+#include <QPrinter>
+#include <QTextStream>
+#include <QTextDocument>
+#include <QDataStream>
 
 #include"QMessageBox"
 class employes
@@ -26,6 +30,8 @@ public:
     bool supprimer(int id);
     QSqlQueryModel* afficher();
   bool modifier();
+  QSqlQueryModel* trieremployes();
+
 
 private :
     int id;

@@ -86,3 +86,21 @@ bool employes::modifier()
           return query.exec();
     
 }
+QSqlQueryModel* employes:: trieremployes()
+{
+
+    QSqlQueryModel * model=new QSqlQueryModel();
+
+    model->setQuery("select * from GE_EMPLOYES order by nom ");
+
+    model->setHeaderData(0, Qt::Horizontal, QObject::tr("id")); //donner nom au colonne
+      model->setHeaderData(1, Qt::Horizontal, QObject::tr(" nom"));
+       model->setHeaderData(2, Qt::Horizontal, QObject::tr("prenom "));
+        model->setHeaderData(3, Qt::Horizontal, QObject::tr("date_naissance"));
+         model->setHeaderData(4, Qt::Horizontal, QObject::tr("adresse "));
+          model->setHeaderData(5, Qt::Horizontal, QObject::tr("grade "));
+
+
+    return model;
+}
+
