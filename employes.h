@@ -7,8 +7,10 @@
 #include <QTextStream>
 #include <QTextDocument>
 #include <QDataStream>
-
 #include"QMessageBox"
+
+
+#include <QWidget>
 class employes
 {
 public:
@@ -21,6 +23,8 @@ public:
     QString getadresse();
     QString getgrade();
     void setid(int);
+    QString getemail();
+    void setpassword(QString);
     void setnom(QString);
     void setprenom(QString);
     void setdate_naissance(QString);
@@ -28,14 +32,18 @@ public:
     void setgrade(QString);
     bool ajouter();
     bool supprimer(int id);
+    int verif_login(QString,QString);
     QSqlQueryModel* afficher();
-  bool modifier();
-  QSqlQueryModel* trieremployes();
+    bool modifier();
+    QSqlQueryModel* trieremployes();
+    QSqlQueryModel* recherche_employes(QString search);
+   int statistiquesemployes(QString adresse);
+
 
 
 private :
     int id;
-    QString nom,prenom,date_naissance,adresse,grade;
+    QString nom,prenom,date_naissance,adresse,grade,email,password;
 
 };
 

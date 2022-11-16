@@ -3,6 +3,7 @@
 #include<QString>
 #include<QSqlQueryModel>
 #include<QDate>
+#include<QTDebug>
 employes::employes()
 {
 id=0;
@@ -11,6 +12,8 @@ prenom="";
 date_naissance="";
 adresse="";
 grade="";
+email="";
+password="";
 }
 
 
@@ -74,10 +77,10 @@ QSqlQueryModel* employes::afficher()
 }
 bool employes::modifier()
 {
-    QSqlQuery query;
-    QString id_string =QString::number(id);
+         QSqlQuery query;
+         QString id_string =QString::number(id);
           query.prepare("update GE_EMPLOYES set nom='" +nom+"',prenom='"+prenom+ " ',date_naissance='"+date_naissance+"',adresse='"+adresse+"',grade='"+grade+"' WHERE ID='"+id_string+"'");
-         query.bindValue(":id", id_string );
+          query.bindValue(":id", id_string );
           query.bindValue(":nom",nom );
           query.bindValue(":prenom", prenom);
           query.bindValue(":date_naissance", date_naissance);
@@ -91,16 +94,42 @@ QSqlQueryModel* employes:: trieremployes()
 
     QSqlQueryModel * model=new QSqlQueryModel();
 
-    model->setQuery("select * from GE_EMPLOYES order by nom ");
-
-    model->setHeaderData(0, Qt::Horizontal, QObject::tr("id")); //donner nom au colonne
-      model->setHeaderData(1, Qt::Horizontal, QObject::tr(" nom"));
-       model->setHeaderData(2, Qt::Horizontal, QObject::tr("prenom "));
-        model->setHeaderData(3, Qt::Horizontal, QObject::tr("date_naissance"));
-         model->setHeaderData(4, Qt::Horizontal, QObject::tr("adresse "));
-          model->setHeaderData(5, Qt::Horizontal, QObject::tr("grade "));
-
+     model->setQuery("select * from GE_EMPLOYES order by nom ");
+     model->setHeaderData(0, Qt::Horizontal, QObject::tr("id")); //donner nom au colonne
+     model->setHeaderData(1, Qt::Horizontal, QObject::tr(" nom"));
+     model->setHeaderData(2, Qt::Horizontal, QObject::tr("prenom "));
+     model->setHeaderData(3, Qt::Horizontal, QObject::tr("date_naissance"));
+     model->setHeaderData(4, Qt::Horizontal, QObject::tr("adresse "));
+     model->setHeaderData(5, Qt::Horizontal, QObject::tr("grade "));
 
     return model;
+}
+QSqlQueryModel * employes ::recherche_employes(QString search)
+ {
+     QSqlQueryModel * model= new QSqlQueryModel();
+     QString qry="select * from GE_EMPLOYES where id like '%"+search+"%' or nom like '%"+search+"%' or prenom like '%"+search+"%' or date_naissance like '%"+search+"%'or adresse like '%"+search+"%' or grade like '%"+search+"%' ";
+     qDebug()<<qry;
+     model->setQuery(qry);
+     return model;
+ }
+int employes::statistiquesemployes(QString adresse)
+{
+    QSqlQuery query;
+        query.prepare("select count(*) from GE_EMPLOYES where adresse=:adresse ");
+        query.bindValue(":adresse",adresse);
+        query.exec();
+        query.next();
+        return query.value(0).toInt();
+}
+int employes::verif_login(QString email,QString password){
+
+        QSqlQuery query;
+        query.prepare("SELECT * FROM GE_EMPLOYES WHERE EMAIL= :email AND PASSWORD= :password");
+        query.bindValue(":email",email);
+        query.bindValue(":password",password);
+        query.exec();
+        query.next();
+       return query.value(0).toInt();
+
 }
 

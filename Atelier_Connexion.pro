@@ -5,8 +5,10 @@
 #-------------------------------------------------
 
 QT       += core gui sql
-QT +=printsupport
+QT       +=printsupport
+QT       +=charts
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+
 
 TARGET = Atelier_Connexion
 TEMPLATE = app
@@ -25,12 +27,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
+    QrCode.cpp \
     employes.cpp \
         main.cpp \
         mainwindow.cpp \
     connection.cpp
 
 HEADERS += \
+    QrCode.hpp \
     employes.h \
         mainwindow.h \
     connection.h
