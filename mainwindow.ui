@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1101</width>
-    <height>959</height>
+    <width>1095</width>
+    <height>967</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,8 +17,8 @@
    <widget class="QStackedWidget" name="SW">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>70</y>
+      <x>10</x>
+      <y>10</y>
       <width>1051</width>
       <height>851</height>
      </rect>
@@ -137,12 +137,60 @@ color: rgb(0, 0, 0);</string>
       </widget>
      </widget>
     </widget>
+    <widget class="QWidget" name="page_2">
+     <widget class="WebAxWidget" name="WebBrowser">
+      <property name="control" stdset="0">
+       <string>{8856F961-340A-11D0-A96B-00C04FD705A2}</string>
+      </property>
+      <property name="focusPolicy" stdset="0">
+       <enum>Qt::StrongFocus</enum>
+      </property>
+      <property name="geometry" stdset="0">
+       <rect>
+        <x>50</x>
+        <y>70</y>
+        <width>961</width>
+        <height>681</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="return_6">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>20</y>
+        <width>131</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+
+color: #000000;
+background: #87CEEB;
+border: none;
+border: 1px solid  #172e4e;
+border-radius: 8px;
+
+}
+QPushButton:hover {
+color:#ffffff;
+
+background:#778899;
+border: none;
+}</string>
+      </property>
+      <property name="text">
+       <string>Return</string>
+      </property>
+     </widget>
+    </widget>
     <widget class="QWidget" name="page_4">
      <widget class="QPushButton" name="supp">
       <property name="geometry">
        <rect>
-        <x>50</x>
-        <y>120</y>
+        <x>80</x>
+        <y>310</y>
         <width>351</width>
         <height>91</height>
        </rect>
@@ -172,8 +220,8 @@ border: none;
      <widget class="QPushButton" name="logout">
       <property name="geometry">
        <rect>
-        <x>340</x>
-        <y>300</y>
+        <x>360</x>
+        <y>120</y>
         <width>341</width>
         <height>81</height>
        </rect>
@@ -197,14 +245,14 @@ border: none;
 }</string>
       </property>
       <property name="text">
-       <string>Logout</string>
+       <string>Login</string>
       </property>
      </widget>
      <widget class="QPushButton" name="b_modifier_2">
       <property name="geometry">
        <rect>
         <x>670</x>
-        <y>120</y>
+        <y>300</y>
         <width>341</width>
         <height>91</height>
        </rect>
@@ -291,6 +339,68 @@ border: none;
       </property>
       <property name="text">
        <string>Ajouter</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="map">
+      <property name="geometry">
+       <rect>
+        <x>90</x>
+        <y>680</y>
+        <width>341</width>
+        <height>81</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+	font: 75 10pt &quot;MS Shell Dlg 2&quot;;
+
+color: #778899c;
+background: #87CEEB;
+border: none;
+border: 1px solid  #172e4e;
+border-radius: 8px;
+
+}
+QPushButton:hover {
+color:#ffffff;
+
+background:#778899;
+border: none;
+}</string>
+      </property>
+      <property name="text">
+       <string>Map</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pointage">
+      <property name="geometry">
+       <rect>
+        <x>670</x>
+        <y>680</y>
+        <width>341</width>
+        <height>81</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+	font: 75 10pt &quot;MS Shell Dlg 2&quot;;
+
+color: #778899c;
+background: #87CEEB;
+border: none;
+border: 1px solid  #172e4e;
+border-radius: 8px;
+
+}
+QPushButton:hover {
+color:#ffffff;
+
+background:#778899;
+border: none;
+}</string>
+      </property>
+      <property name="text">
+       <string>Pointage</string>
       </property>
      </widget>
     </widget>
@@ -562,6 +672,52 @@ border: none;
       </property>
       <property name="styleSheet">
        <string notr="true">color:rgb(200, 141, 40);</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="page_8">
+     <widget class="QTableView" name="tabEnreg_2">
+      <property name="geometry">
+       <rect>
+        <x>180</x>
+        <y>140</y>
+        <width>541</width>
+        <height>251</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color:rgb(200, 141, 40);</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="return_7">
+      <property name="geometry">
+       <rect>
+        <x>710</x>
+        <y>630</y>
+        <width>131</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+	font: 75 10pt &quot;MS Shell Dlg 2&quot;;
+
+color: #778899c;
+background: #87CEEB;
+border: none;
+border: 1px solid  #172e4e;
+border-radius: 8px;
+
+}
+QPushButton:hover {
+color:#ffffff;
+
+background:#778899;
+border: none;
+}</string>
+      </property>
+      <property name="text">
+       <string>Return</string>
       </property>
      </widget>
     </widget>
@@ -1164,7 +1320,7 @@ border: none;
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1101</width>
+     <width>1095</width>
      <height>26</height>
     </rect>
    </property>
@@ -1180,6 +1336,18 @@ border: none;
   <widget class="QStatusBar" name="statusBar"/>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>QAxWidget</class>
+   <extends>QWidget</extends>
+   <header>qaxwidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>WebAxWidget</class>
+   <extends>QAxWidget</extends>
+   <header location="global">webaxwidget.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

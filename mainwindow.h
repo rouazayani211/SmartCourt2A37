@@ -1,7 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
-
+#include"arduino.h"
 #include <QMainWindow>
+#include"enregistrement.h"
 #include"employes.h"
 namespace Ui {
 class MainWindow;
@@ -55,10 +56,25 @@ private slots:
 
     void on_ajouter_2_clicked();
 
+    void on_map_clicked();
+
+    void on_return_6_clicked();
+void rechEmploy();
+
+
+
+
+
+void on_pointage_clicked();
+
+void on_return_7_clicked();
+
 private:
     Ui::MainWindow *ui;
     employes emp;
-
+    QByteArray data; // variable contenant les données reçues
+      enregistrement tmpEnreg;
+    Arduino A;
 
 };
 

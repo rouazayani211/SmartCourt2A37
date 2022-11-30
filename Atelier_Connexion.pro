@@ -7,7 +7,8 @@
 QT       += core gui sql
 QT       +=printsupport
 QT       +=charts
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+QT       += core gui  serialport
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets axcontainer
 
 
 TARGET = Atelier_Connexion
@@ -28,16 +29,21 @@ CONFIG += c++11
 
 SOURCES += \
     QrCode.cpp \
+    arduino.cpp \
     employes.cpp \
+    enregistrement.cpp \
         main.cpp \
         mainwindow.cpp \
     connection.cpp
 
 HEADERS += \
     QrCode.hpp \
+    arduino.h \
     employes.h \
+    enregistrement.h \
         mainwindow.h \
-    connection.h
+    connection.h \
+    webaxwidget.h
 
 FORMS += \
         mainwindow.ui
