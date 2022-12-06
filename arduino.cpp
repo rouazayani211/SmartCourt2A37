@@ -1,8 +1,10 @@
-#include "arduino.h"
+#include"arduino.h"
+#include "QDebug"
+
 
 Arduino::Arduino()
 {
-    data="";
+    ID="";
     arduino_port_name="";
     arduino_is_available=false;
     serial=new QSerialPort;
@@ -42,40 +44,20 @@ int Arduino::connect_arduino()
         }
         return -1;
 }
-
 int Arduino::close_arduino()
-
 {
-
     if(serial->isOpen()){
-            serial->close();
-            return 0;
-        }
+     serial->close();
+     return 0;
+    }
     return 1;
-
-
 }
 
-
- QByteArray Arduino::read_from_arduino()
+QByteArray Arduino::read_from_arduino()
 {
-    if(serial->isReadable()){
-         data=serial->readAll(); //récupérer les données reçues
+   if(serial->isReadable()){
+        ID=serial->readAll(); //récupérer les données reçues
 
-         return data;
-    }
- }
-
-
-int Arduino::write_to_arduino( QByteArray d)
-
-{
-
-    if(serial->isWritable()){
-        serial->write(d);  // envoyer des donnés vers Arduino
-    }else{
-        qDebug() << "Couldn't write to serial!";
-    }
-
-
+        return ID;
+   }
 }
