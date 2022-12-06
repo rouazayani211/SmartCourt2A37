@@ -1,5 +1,5 @@
 #include "stat_combo.h"
-#include "citoyen.h"
+#include "avocat.h"
 #include "ui_stat_combo.h"
 
 QT_CHARTS_USE_NAMESPACE
@@ -22,16 +22,16 @@ void stat_combo::choix_bar()
 QSqlQuery q1,q2,q3,q4;
 qreal tot=0,c1=0,c2=0,c3=0;
 
-q1.prepare("SELECT * FROM CITOYEN");
+q1.prepare("SELECT * FROM avocat");
 q1.exec();
 
-q2.prepare("SELECT * FROM CITOYEN WHERE ETAT_C='Accuse'");
+q2.prepare("SELECT * FROM avocat WHERE grade='Penaliste'");
 q2.exec();
 
-q3.prepare("SELECT * FROM CITOYEN WHERE ETAT_C='Temoin'");
+q3.prepare("SELECT * FROM avocat WHERE grade='Avocat d'affaires'");
 q3.exec();
 
-q4.prepare("SELECT * FROM CITOYEN WHERE ETAT_C='Membre de public' ");
+q4.prepare("SELECT * FROM avocat WHERE grade='Avocat d'affaires civiles' ");
 q4.exec();
 
 while (q1.next()){tot++;}
@@ -48,11 +48,11 @@ QString c2S=QString::number(c2*100);
 QString c3S=QString::number(c3*100);
 
 // Assign names to the set of bars used
-        QBarSet *set0 = new QBarSet("Accuse "
+        QBarSet *set0 = new QBarSet("Penaliste "
                                     +c1S+"%");
-        QBarSet *set1 = new QBarSet("Temoin "
+        QBarSet *set1 = new QBarSet("Avocat d'affaires "
                                     +c2S+"%");
-        QBarSet *set2 = new QBarSet("Membre de public "
+        QBarSet *set2 = new QBarSet("Avocat d'affaires civiles "
                                     +c3S+"%");
 
         // Assign values for each bar
@@ -115,16 +115,16 @@ chartView->show();
     QSqlQuery q1,q2,q3,q4;
     qreal tot=0,c1=0,c2=0,c3=0;
 
-    q1.prepare("SELECT * FROM CITOYEN");
+    q1.prepare("SELECT * FROM avocat");
     q1.exec();
 
-    q2.prepare("SELECT * FROM CITOYEN WHERE ETAT_C='Accuse'");
+    q2.prepare("SELECT * FROM avocat WHERE grade='Penaliste'");
     q2.exec();
 
-    q3.prepare("SELECT * FROM CITOYEN WHERE ETAT_C='Temoin'");
+    q3.prepare("SELECT * FROM avocat WHERE grade='Avocat d'affaires'");
     q3.exec();
 
-    q4.prepare("SELECT * FROM CITOYEN WHERE ETAT_C='Membre de public' ");
+    q4.prepare("SELECT * FROM avocat WHERE grade='Avocat d'affaires civiles' ");
     q4.exec();
 
     while (q1.next()){tot++;}
@@ -138,15 +138,15 @@ chartView->show();
 
     // Define slices and percentage of whole they take up
     QPieSeries *series = new QPieSeries();
-    /*series->append("Accuse",c1);
-    series->append("Temoin",c2);
-    series->append("Membre de public",c3);*/
+    /*series->append("Penaliste",c1);
+    series->append("Avocat d'affaires",c2);
+    series->append("Avocat d'affaires civiles",c3);*/
     QString c1S=QString::number(c1*100);
     QString c2S=QString::number(c2*100);
     QString c3S=QString::number(c3*100);
-    QPieSlice *slice1 =series->append("Accuse "+c1S+"%",c1);
-    QPieSlice *slice2 =series->append("Temoin "+c2S+"%",c2);
-    QPieSlice *slice3=series->append("Membre de public "+c3S+"%",c3);
+    QPieSlice *slice1 =series->append("Penaliste "+c1S+"%",c1);
+    QPieSlice *slice2 =series->append("Avocat d'affaires "+c2S+"%",c2);
+    QPieSlice *slice3=series->append("Avocat d'affaires civiles "+c3S+"%",c3);
     series->setHoleSize(0.25);
      slice1->setLabelVisible();
       slice1->setExploded();

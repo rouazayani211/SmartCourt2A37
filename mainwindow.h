@@ -1,10 +1,13 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
-
+#include "avocat.h"
+#include "notepad.h"
+#include "camera.h"
+#include "stat_combo.h"
 #include <QMainWindow>
-#include "citoyen.h"
-#include <QMediaPlayer>
-#include <QSound>
+#include <QInputDialog>
+#include <QMainWindow>
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -19,18 +22,33 @@ public:
     ~MainWindow();
 
 private slots:
+    void on_pb_ajouter_clicked();
 
-    void on_pushButton_ajouter_clicked();
-    void on_pushButton_supprimer_clicked();
-    void on_pushButton_modifier_clicked();
+    void on_pb_supprimer_clicked();
 
+    void on_pb_modifier_clicked();
+
+    void on_pb_PDF_clicked();
+
+    void on_rb_tri1_clicked();
+
+    void on_rb_tri2_clicked();
+
+    void on_la_recherche_clicked();
+
+    void on_pb_stat_clicked();
+
+    void on_note_clicked();
+
+    void on_cam_clicked();
 
 private:
     Ui::MainWindow *ui;
-    Citoyen Etmp;
-    QSound *sound;
-     QMediaPlayer* player;
-}
-;
+    Avocat A;
+    stat_combo *s;
+    Notepad *n;
+    camera *c;
+
+    };
 
 #endif // MAINWINDOW_H
