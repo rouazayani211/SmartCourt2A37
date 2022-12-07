@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "arduino.h"
 #include"salles.h"
 #include <QMainWindow>
 
@@ -34,12 +35,24 @@ private slots:
 
     void on_pushButton_stat_ghatas_clicked();
 
-    void on_pushButton_clicked();
+   // void on_pushButton_clicked();
+
+    //void on_pushButton_sortie_ghatas_clicked();
+
+    void write(QString);
+
+    void read();
+
+    void on_pushButton_entree_ghatas_clicked();
 
     void on_pushButton_sortie_ghatas_clicked();
 
 private:
     Ui::MainWindow *ui;
     salles s;
+
+    QByteArray data,ba; // variable contenant les données reçues
+
+    Arduino A; // objet temporaire
 };
 #endif // MAINWINDOW_H

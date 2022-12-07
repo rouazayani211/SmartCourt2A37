@@ -12,18 +12,19 @@ class salles {
     int capacite;
     QString departement;
     int nbp ;
+    QDate date_reservation;
+    QString etat ;
 public:
     salles();//constructeur par défaut
-    salles(int ,int ,QString, int );//constructeur paramétré
+    salles(int ,int ,QString, int , QDate , QString  );//constructeur paramétré
     bool ajouter_salle();
     QSqlQueryModel *afficher_salle();
     bool modifier_salle();
     bool supprimer_salle(int);
     QSqlQueryModel *TriParNum();
     QSqlQueryModel *Recherche(QString);
-    bool ajouter_action(int,QString);
-    QSqlQueryModel *afficher_actions();
-    bool modifier_nbp();
+
+
 };
 
 #endif // SALLES_H

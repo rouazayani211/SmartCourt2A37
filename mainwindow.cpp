@@ -21,6 +21,10 @@
 #include <QtCharts/QChartView>
 #include <QtCharts/QPieSeries>
 #include <QtCharts/QPieSlice>
+#include <QFile>
+#include <QString>
+#include <QDebug>
+#include <QTextStream>
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -28,9 +32,41 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+        /////////////////////////////////////////////////////////// arduino
+    int ret=A.connect_arduino(); // lancer la connexion à arduino
+    switch(ret){
+    case(0):qDebug()<< "arduino is available and connected to : "<< A.getarduino_port_name();
+        break;
+    case(1):qDebug() << "arduino is available but not connected to :" <<A.getarduino_port_name();
+       break;
+    case(-1):qDebug() << "arduino is not available";
+    }
+     QObject::connect(A.getserial(),SIGNAL(readyRead()),this,SLOT(update_label())); // permet de lancer
+     //le slot update_label suite à la reception du signal readyRead (reception des données).
+        /// ////////////////////////////////////
     ui->tableView_salle_ghatas->setModel(s.afficher_salle());
-    ui->tableView_historique_ghatas->setModel(s.afficher_actions());
     ui->ComboBox_numsallemodif_ghatas->setModel(s.afficher_salle());
+    read();
+    int nbs = 0 ;
+    QSqlQueryModel *model=new QSqlQueryModel();
+      model = s.afficher_salle();
+      QDate da;
+      QString das = (da.currentDate()).toString("yyyy-MM-dd");
+      qDebug()<< das  ;
+      for (int i = 0; i < model->rowCount(); i++) {
+          qDebug() << (model->data(model->index(i,4)).toString());
+          if ( (das == (model->data(model->index(i,4)).toString())) && ((model->data(model->index(i,5)).toString()) == "Reservee" ))
+          {
+              nbs++;
+          }
+      }
+
+
+    QString res = QString::number(nbs);
+    QSystemTrayIcon *notifyIcon = new QSystemTrayIcon;
+    notifyIcon->show();
+    notifyIcon->showMessage("Notification Salle ","il ya " + res + " salles reservess aujourdui le " + das,QSystemTrayIcon::Information,15000);
+
 }
 
 MainWindow::~MainWindow()
@@ -44,8 +80,10 @@ void MainWindow::on_pushButton_ajoute_ghatas_clicked()
        int capacite=ui->Line_Edit_capacite_ghatas->text().toInt();
        QString depart=ui->comboBox_departement_ghatas->currentText();
        int nbp=ui->lineEdit_nbp_ghatas->text().toInt();
+       QDate date = ui->dateEdit_res_ghatas->date();
+       QString etat = ui->comboBox_etat_ghatas->currentText();
 
-       salles s1(0,capacite,depart,nbp) ;//sna3et  instance mel classe salle bel constructeur parametre
+       salles s1(0,capacite,depart,nbp,date,etat) ;//sna3et  instance mel classe salle bel constructeur parametre
 
     if((nbp==0)||(capacite==0))
     {
@@ -65,6 +103,10 @@ void MainWindow::on_pushButton_ajoute_ghatas_clicked()
                                 "Cancel to exit."), QMessageBox::Cancel);
         ui->tableView_salle_ghatas->setModel(s.afficher_salle());
         ui->ComboBox_numsallemodif_ghatas->setModel(s.afficher_salle());
+        QString a = QDate::currentDate().toString();
+        QString ajout = "ajout " + a;
+        write(ajout);
+        read();
     }
 
     else
@@ -81,12 +123,14 @@ void MainWindow::on_pushButton_modifier_ghatas_clicked()
     int capacite = ui->Line_Edit_capacite_ghatas->text().toInt();
     QString depart=ui->comboBox_departement_ghatas->currentText();
     int nbp=ui->lineEdit_nbp_ghatas->text().toInt();
+    QDate date = ui->dateEdit_res_ghatas->date();
+    QString etat = ui->comboBox_etat_ghatas->currentText();
 
       if((numsalle==0)||(capacite==0))//||(truck_id==""))
       {
-         QMessageBox::information(nullptr,QObject::tr("Ajouter une salle"),QObject::tr("Remplir les champs"),QMessageBox::Ok);
+         QMessageBox::information(nullptr,QObject::tr("Modifier une salle"),QObject::tr("Remplir les champs"),QMessageBox::Ok);
       }
-      salles s(numsalle,capacite,depart,nbp);
+      salles s(numsalle,capacite,depart,nbp,date,etat);
 
       bool test=s.modifier_salle();
       if(test)
@@ -96,6 +140,10 @@ void MainWindow::on_pushButton_modifier_ghatas_clicked()
                       QObject::tr("Salle modfiée.\n"
                                   "Click Cancel to exit."), QMessageBox::Cancel);
           ui->tableView_salle_ghatas->setModel(s.afficher_salle());
+          QString a = QDate::currentDate().toString();
+          QString modif = "modification " + a;
+          write(modif);
+          read();
       }
       else
        {        QMessageBox::critical(nullptr, QObject::tr("Salle non modifiée"),
@@ -125,6 +173,10 @@ void MainWindow::on_pushButton_supprimer_ghatas_clicked()
                                           "Click Cancek to exit"), QMessageBox::Cancel);
         ui->tableView_salle_ghatas->setModel(s.afficher_salle());
         ui->ComboBox_numsallemodif_ghatas->setModel(s.afficher_salle());
+        QString a = QDate::currentDate().toString();
+        QString supp = "suppression " + a;
+        write(supp);
+        read();
     }
 }
 
@@ -141,7 +193,7 @@ void MainWindow::on_pushButton_pdf_ghatas_clicked()
 {
     QPrinter printer;
 
-    QPdfWriter pdf("C:/Users/firas/Desktop/test.pdf");
+    QPdfWriter pdf("C:/Users/Adem Hamdi/Desktop/salles_fi/test.pdf");
                 QPainter painter(&pdf);
                 int i = 4000;
                 painter.setPen(Qt::red);
@@ -172,7 +224,7 @@ void MainWindow::on_pushButton_pdf_ghatas_clicked()
                 int reponse = QMessageBox::question(this, "Génerer PDF", "<PDF Enregistré>...Vous Voulez Affichez Le PDF ?", QMessageBox::Yes |  QMessageBox::No);
                 if (reponse == QMessageBox::Yes)
                 {
-                    QDesktopServices::openUrl(QUrl::fromLocalFile("C:/Users/firas/Desktop/test.pdf"));
+                    QDesktopServices::openUrl(QUrl::fromLocalFile("C:/Users/Adem Hamdi/Desktop/salles_fi/test.pdf"));
 
                     painter.end();
                 }
@@ -234,94 +286,65 @@ void MainWindow::on_pushButton_stat_ghatas_clicked()
             chart->legend()->hide();
             chartView->show();
 }
-
-void MainWindow::on_pushButton_clicked()
+void MainWindow::write(QString action)
 {
-    int num=ui->tableView_salle_ghatas->model()->data(ui->tableView_salle_ghatas->model()->index(ui->tableView_salle_ghatas->currentIndex().row(),0)).toInt();
-    int cap=ui->tableView_salle_ghatas->model()->data(ui->tableView_salle_ghatas->model()->index(ui->tableView_salle_ghatas->currentIndex().row(),1)).toInt();
-    int nbp=ui->tableView_salle_ghatas->model()->data(ui->tableView_salle_ghatas->model()->index(ui->tableView_salle_ghatas->currentIndex().row(),3)).toInt();
-    if (num == 0)
+    QFile file("C:/Users/Adem Hamdi/Desktop/salles_fi/Historique.txt");
+    // Trying to open in WriteOnly and Text mode
+    if(!file.open(QIODevice::Append |
+                  QFile::Text))
     {
-        QMessageBox::information(nullptr, QObject::tr("vide!"),
-                              QObject::tr("Selectionnez une salle.\n"
-                                          "Click Cancek to exit"), QMessageBox::Cancel);
+        qDebug() << " Could not open file for writing";
+        return;
     }
-    else
-    {
-    if (nbp<cap)
-    {
-       nbp++;
-       salles s1(num,cap,"aaaa",nbp);
-       bool test = s1.modifier_nbp();
-       if (test)
-       {
-           ui->tableView_salle_ghatas->setModel(s.afficher_salle());
 
-       bool test1 = s1.ajouter_action(num,"Entree");
-       if (test1)
-       {
-           QMessageBox::information(nullptr, QObject::tr("action ajoutée"),
-                                 QObject::tr("entrée ajouté .\n"
-                                             "Click Cancek to exit"), QMessageBox::Cancel);
-           ui->tableView_historique_ghatas->setModel(s.afficher_actions());
-       }
-       else {
-           QMessageBox::critical(nullptr, QObject::tr("action non ajoutée"),
-                                 QObject::tr("entrée non ajoutée .\n"
-                                             "Click Cancek to exit"), QMessageBox::Cancel);
-       }
+    // To write text, we use operator<<(),
+    // which is overloaded to take
+    // a QTextStream on the left
+    // and data types (including QString) on the right
 
-       }
-    }
-    if (nbp == cap)
+    QTextStream out(&file);
+    out << action << endl;
+    file.flush();
+    file.close();
+}
+void MainWindow::read()
+{
+    QFile file("C:/Users/Adem Hamdi/Desktop/salles_fi/Historique.txt");
+    if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        QSystemTrayIcon *notifyIcon = new QSystemTrayIcon;
-                    QString res=QString::number(num);
-                    notifyIcon->show();
-                    notifyIcon->showMessage("Notification Salle ","la salle dont le numero est "+res+" est saturée",QSystemTrayIcon::Information,15000);
+        qDebug() << " Could not open the file for reading";
+        return;
     }
-    }
+    QStandardItemModel * model = new QStandardItemModel();
+    QTextStream in(&file);
+    int i = 0 ;
+
+
+        while (!file.atEnd()) {
+            QByteArray line = file.readLine();
+            qDebug() << line;
+            QString txt = line ;
+            QStandardItem *item= new QStandardItem(txt);
+             model->insertRow(i,item);
+             i++;
+        }
+
+    file.close();
+    model->setHeaderData(0, Qt::Horizontal, QObject::tr("Action"));
+    ui->tableView_historique_ghatas->setModel(model);
 }
 
 
+void MainWindow::on_pushButton_entree_ghatas_clicked()
+{
+    QByteArray ba ="entree!! ";
+
+     A.write_to_arduino(ba);
+}
+
 void MainWindow::on_pushButton_sortie_ghatas_clicked()
 {
-    int num=ui->tableView_salle_ghatas->model()->data(ui->tableView_salle_ghatas->model()->index(ui->tableView_salle_ghatas->currentIndex().row(),0)).toInt();
-    int cap=ui->tableView_salle_ghatas->model()->data(ui->tableView_salle_ghatas->model()->index(ui->tableView_salle_ghatas->currentIndex().row(),1)).toInt();
-    int nbp=ui->tableView_salle_ghatas->model()->data(ui->tableView_salle_ghatas->model()->index(ui->tableView_salle_ghatas->currentIndex().row(),3)).toInt();
-    if (num == 0)
-    {
-        QMessageBox::information(nullptr, QObject::tr("vide!"),
-                              QObject::tr("Selectionnez une salle.\n"
-                                          "Click Cancek to exit"), QMessageBox::Cancel);
-    }
-    else
-    {
-    if (nbp>0)
-    {
-       nbp--;
-       salles s1(num,cap,"aaaa",nbp);
-       bool test = s1.modifier_nbp();
-       if (test)
-       {
-           ui->tableView_salle_ghatas->setModel(s.afficher_salle());
+    QByteArray ba ="sortie!! ";
 
-       bool test1 = s1.ajouter_action(num,"Sortie");
-       if (test1)
-       {
-           QMessageBox::information(nullptr, QObject::tr("action ajoutée"),
-                                 QObject::tr("sortie ajouté .\n"
-                                             "Click Cancek to exit"), QMessageBox::Cancel);
-           ui->tableView_historique_ghatas->setModel(s.afficher_actions());
-       }
-       else {
-           QMessageBox::critical(nullptr, QObject::tr("action non ajoutée"),
-                                 QObject::tr("sortie non ajoutée .\n"
-                                             "Click Cancek to exit"), QMessageBox::Cancel);
-       }
-
-       }
-    }
-
-    }
+     A.write_to_arduino(ba);
 }
