@@ -1,6 +1,6 @@
 #include "smtp.h"
 
-Smtp::Smtp( const QString &user, const QString &pass, const QString &host, int port, int timeout )
+Smtp::Smtp( const QString &user, const QString &pass, const QString &host, qint16 port, int timeout )
 {
     socket = new QSslSocket(this);
 
@@ -11,7 +11,7 @@ Smtp::Smtp( const QString &user, const QString &pass, const QString &host, int p
     connect(socket, SIGNAL(disconnected()), this,SLOT(disconnected()));
 
 
-    this->user = user;
+    this->user = user;//les constructeurs , affectation des valeurs
     this->pass = pass;
 
     this->host = host;
@@ -19,7 +19,7 @@ Smtp::Smtp( const QString &user, const QString &pass, const QString &host, int p
     this->timeout = timeout;
 
 
-}
+}//initiatialisation des sockets,
 
 void Smtp::sendMail(const QString &from, const QString &to, const QString &subject, const QString &body, QStringList files)
 {
@@ -141,14 +141,14 @@ void Smtp::readyRead()
         state = HandShake;
     }
     //No need, because I'm using socket->startClienEncryption() which makes the SSL handshake for you
-    else if (state == Tls && responseLine == "250")
+  /*  else if (state == Tls && responseLine == "250")
     {
         // Trying AUTH
         qDebug() << "STarting Tls";
         *t << "STARTTLS" << "\r\n";
         t->flush();
         state = HandShake;
-    }
+    } */ //hethi eli raja3ha
     else if (state == HandShake && responseLine == "250")
     {
         socket->startClientEncryption();
@@ -245,5 +245,5 @@ void Smtp::readyRead()
         state = Close;
         emit status( tr( "Failed to send message" ) );
     }
-    response = "";
+response="";
 }

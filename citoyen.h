@@ -6,49 +6,66 @@
 #include<QSqlQueryModel>
 
 
+
 class Citoyen
 {
 public:
-    Citoyen();
-    Citoyen(int,QString,QString,QString,int,QDate,QString);
+    Citoyen();                                                 //constructeur par défaut
+    Citoyen(QString,QString,QString,int,QDate,QString,int,QString,QString);    //constructeur paramétré
 
-//getter
-int getcin();
-QString getnom();
-QString getprenom();
-QString getadresse();
-int getnum();
-QDate getdate();
-QString getnationalite();
+//getter:afficher
+QString getnom_c();
+QString getprenom_c();
+QString getnationalite_c();
+int getcin_c();
+QDate getdate_c();
+QString getadresse_c();
+int getnum_c();
+QString getemail_c();
+QString getetat_c();
 
 
-
-//setter
-void setcin(int);
-void setnom(QString);
-void setprenom(QString);
-void setadresse(QString);
-void setnum(int);
-void setdate(QDate);
-void setnationalite(QString);
+//setter:modifier
+void setnom_c(QString);
+void setprenom_c(QString);
+void setnationalite_c(QString);
+void setcin_c(int);
+void setdate_c(QDate);
+void setadresse_c(QString);
+void setnum_c(int);
+void setemail_c(QString);
+void setetat_c(QString);
 
 //methode
 bool ajouterCitoyen();
 QSqlQueryModel* afficherCitoyen();
 bool supprimerCitoyen(int);
-bool modifierCitoyen(int,QString,QString,QString,int,QDate,QString);
+bool modifierCitoyen();
+QSqlQueryModel* trierCitoyen();
+QSqlQueryModel* trierCitoyen2();
+Citoyen chercher_cin(int cin_c);
+QSqlQueryModel* chercherCitoyen_par_cin(QString);
+//int calculEtat(QString);
+//bool UpdateQrcodeLink(QString, QString);
+//QSqlQuery NbCitoyen();
+//QSqlQuery NbCitoyen1000();
 
 
 
 
 private:
-int cin;
-QString nom;
-QString prenom;
-QString adresse ;
-int num ;
-QDate date;
-QString nationalite;
+
+QString nom_c;
+QString prenom_c;
+QString nationalite_c;
+int cin_c;
+QDate date_c;
+QString adresse_c ;
+int num_c ;
+QString email_c ;
+QString etat_c ;
+
+
 
 
 };

@@ -1,12 +1,18 @@
 #ifndef SMTP_H
 #define SMTP_H
 
-
 #include <QtNetwork/QAbstractSocket>
 #include <QtNetwork/QSslSocket>
 #include <QString>
+#include <QSsl>
+#include <qsslsocket.h>
+#include <QSslError>
+
 #include <QTextStream>
+#include <QSslSocket>
+#include <QVariant>
 #include <QDebug>
+#include <QAbstractSocket>
 #include <QtWidgets/QMessageBox>
 #include <QByteArray>
 #include <QFile>
@@ -21,7 +27,7 @@ class Smtp : public QObject
 
 public:
     Smtp( const QString &user, const QString &pass,
-          const QString &host, int port = 465, int timeout = 30000 );
+          const QString &host, qint16 port = 587, int timeout = 30000 );
     ~Smtp();
 
     void sendMail( const QString &from, const QString &to,
@@ -49,7 +55,7 @@ private:
     QString user;
     QString pass;
     QString host;
-    int port;
+    qint16 port;
     enum states{Tls, HandShake ,Auth,User,Pass,Rcpt,Mail,Data,Init,Body,Quit,Close};
     int state;
 
