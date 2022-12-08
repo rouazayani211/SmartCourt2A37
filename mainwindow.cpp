@@ -296,13 +296,13 @@ void MainWindow::on_pushButton_stat_clicked()
 
 void   MainWindow::on_sendBtn_clicked()
 {
-    Smtp* smtp = new Smtp("mariem.mannai@esprit.tn","191JFT47944", "smtp.gmail.com",465);
+    Smtp* smtp = new Smtp("*mail*","*mdp du mail", "smtp.gmail.com",465);
     connect(smtp, SIGNAL(status(QString)), this, SLOT(mailSent(QString)));
 
     if( !files.isEmpty() )
-        smtp->sendMail("marwamannai987@gmail.com", ui->rcpt->text() , ui->subject->text(),ui->msg->toPlainText() );
+        smtp->sendMail("*mail du recipient*", ui->rcpt->text() , ui->subject->text(),ui->msg->toPlainText() );
     else
-        smtp->sendMail("marwamannai987@gmail.com", ui->rcpt->text() , ui->subject->text(),ui->msg->toPlainText());
+        smtp->sendMail("*mail du recipient*", ui->rcpt->text() , ui->subject->text(),ui->msg->toPlainText());
 
     ui->rcpt->setText("");
     ui->subject->setText("");
